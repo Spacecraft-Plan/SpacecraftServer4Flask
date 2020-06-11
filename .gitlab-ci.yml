@@ -8,6 +8,7 @@ docker-deploy:
   stage: deploy
   # 执行Job内容
   script:
+    - docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
     - ifconfig
     - docker build -t spacecraftserver4flask .
     - if [ $(docker ps -aq --filter name= crawler-server) ]; then docker rm -f crawler-server;fi
