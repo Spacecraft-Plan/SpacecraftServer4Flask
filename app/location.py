@@ -29,7 +29,7 @@ def data():
     if request.method == 'POST':
         if uuid > 0:
             db.execute(
-                'INSERT INTO location (uuid,body) VALUES (?,?)',
+                'INSERT INTO lbs (uuid,body) VALUES (?,?)',
                 (uuid, body)
             )
             db.commit()
@@ -39,7 +39,7 @@ def data():
     elif request.method == 'GET':
         if uuid > 0:
             locations = db.execute(
-                'SELECT created,body FROM location WHERE uuid=?', (uuid,)).fetchall()
+                'SELECT created,body FROM lbs WHERE uuid=?', (uuid,)).fetchall()
             # for location in locations
             # return " location get uuid:{} \nbody:{}".format(uuid,locations)
             resp_body = []
@@ -52,8 +52,17 @@ def data():
 
         else:  # get alll
             locations = db.execute(
-                'SELECT uuid,body FROM location').fetchall()
+                'SELECT uuid,body FROM lbs').fetchall()
             return " location get all \n{} ".format(locations)
 
     print(" response data sucessful ")
     return " invaldate request method"
+
+@bp.route('/getIp', methods=('POST', 'GET'))
+def getIp():
+    # print(request.remote_addr)
+    if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
+        print(request.environ['REMOTE_ADDR'])
+    else:
+        print(request.environ['HTTP_X_FORWARDED_FOR']) # if behind a proxy
+    return 'response sucessful'
