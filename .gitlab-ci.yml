@@ -8,11 +8,11 @@ docker-deploy:
   stage: deploy
   # 执行Job内容
   script:
+    - ifconfig
     - docker build -t spacecraftserver4flask .
     - if [ $(docker ps -aq --filter name= crawler-server) ]; then docker rm -f crawler-server;fi
     - docker run -d -p 9000:9000 --name spacecraftserver4flask spacecraftserver4flask
     # - docker run --name  crawler-server --publish 9000:9000  crawler-server #会阻塞ci log
-    - ifconfig | grep inet
   # tags:
   #   # 执行Job的服务器
   #   - spacecraftserver4flask-tag
